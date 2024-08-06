@@ -4,6 +4,7 @@ using Domain.Constants;
 using Domain.Entities.Enums;
 using Domain.Exceptions;
 using Domain.SeedWork.Notification;
+using static System.String;
 
 namespace Domain.Entities;
 
@@ -16,14 +17,14 @@ public class User : BaseEntity
         (Hash, Salt) = HashPassword(password);
         Role = UserRole.User;
     }
-    public string Login { get; set; }
-    public string Hash { get; private set; }
-    public string Salt { get; private set; }
-    public Guid PersonId { get; set; }
-    public UserRole Role { get; set; }
+    public string Login { get; private set; } = Empty;
+    public string Hash { get; private set; } = Empty;
+    public string Salt { get; private set; } = Empty;
+    public Guid PersonId { get; private set; }
+    public UserRole Role { get; private set; }
 
     #region Mapping
-    public virtual Person? Person { get; set; } = null;
+    public virtual Person? Person { get; set; }
     #endregion
     
     private readonly HashAlgorithm _hashAlgorithm = SHA256.Create();

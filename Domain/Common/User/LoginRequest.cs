@@ -5,10 +5,10 @@ using static System.String;
 
 namespace Domain.Common.User;
 
-public class LoginRequest
+public class LoginRequest(string login, string password)
 {
-    public string Login { get; set; }
-    public string Password { get; set; }
+    public string Login { get; set; } = login;
+    public string Password { get; set; } = password;
 
     public void Check()
     {
