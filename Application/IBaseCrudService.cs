@@ -4,9 +4,9 @@ namespace Application;
 
 public interface IBaseCrudService<T> where T : class
 {
-    public Task<BaseResponse<T>> GetByIdAsync(Guid id);
-    public Task<BaseResponse<IEnumerable<T>>> GetListAsync(int pageIndex, int pageSize);
-    public Task<BaseResponse<T>> CreateAsync(T entity);
-    public Task<BaseResponse<T>> UpdateAsync(T entity);
-    public Task<BaseResponse<object>> DeleteAsync(Guid id);
+    public Task<T?> GetByIdAsync(Guid id);
+    public Task<IEnumerable<T>> GetListAsync(int pageIndex, int pageSize);
+    public Task CreateAsync(T entity);
+    public Task UpdateAsync(T entity);
+    public Task DeleteAsync(Guid id);
 }
