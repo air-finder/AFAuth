@@ -15,11 +15,11 @@ public class JwtService(IOptionsSnapshot<AppSettings> appSettings) : IJwtService
 
     public string CreateToken(UserDto user)
     {
-        var secret = _appSettings.Jwt?.Secret;
+        var secret = _appSettings.Jwt?.Secret!;
         var expirationTime = Convert.ToInt32(_appSettings.Jwt?.SessionExpirationHours);
         
         var signinKey = new SigningCredentials(
-            new SymmetricSecurityKey(Convert.FromBase64String(secret ?? String.Empty)),
+            new SymmetricSecurityKey(Convert.FromBase64String(secret)),
             SecurityAlgorithms.HmacSha256
         );
 

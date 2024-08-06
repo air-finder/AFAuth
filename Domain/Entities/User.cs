@@ -1,9 +1,6 @@
 ﻿using System.Security.Cryptography;
 using Application.Helpers;
-using Domain.Constants;
 using Domain.Entities.Enums;
-using Domain.Exceptions;
-using Domain.SeedWork.Notification;
 using static System.String;
 
 namespace Domain.Entities;
@@ -20,7 +17,7 @@ public class User : BaseEntity
     public string Login { get; private set; } = Empty;
     public string Hash { get; private set; } = Empty;
     public string Salt { get; private set; } = Empty;
-    public Guid PersonId { get; private set; }
+    public Guid PersonId { get; set; }
     public UserRole Role { get; private set; }
 
     #region Mapping

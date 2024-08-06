@@ -2,17 +2,20 @@
 using Domain.Common;
 using Domain.Common.People;
 using Domain.Entities.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace API.Controllers;
 [Route("api/[controller]")]
+[Authorize]
 public class PeopleController(IPeopleService service): Controller
 {
     [HttpPost]
     [SwaggerOperation(Summary = "Creates a person with an user bound")]
     [ProducesResponseType(typeof(BaseResponse<object>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(BaseResponse<object>), StatusCodes.Status400BadRequest)]
+    [AllowAnonymous]
     public async Task<IActionResult> CreatePerson([FromBody] CreatePersonRequest request)
     {
         return Ok(await service.CreateAsync(request));
