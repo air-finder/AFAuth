@@ -2,6 +2,8 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine3.19 AS base
 WORKDIR /app
 
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
+
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
 RUN apk update && \
