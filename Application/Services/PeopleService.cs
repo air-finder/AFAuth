@@ -7,7 +7,6 @@ using Domain.Entities.Dtos;
 using Domain.Exceptions;
 using Domain.Repositories;
 using Domain.SeedWork.Notification;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Services;
 
@@ -17,7 +16,6 @@ public class PeopleService(IPeopleRepository userRepository) : BaseCrudService<P
     {
         request.Check();
         await CheckDatabase(request.Email, request.Login);
-        if (NotificationsWrapper.HasNotification()) throw new NotificationException();
         Person person = request;
         person.AddUser(new User(request.Login, request.Password));
         await userRepository.InsertWithSaveChangesAsync(person);
@@ -31,21 +29,34 @@ public class PeopleService(IPeopleRepository userRepository) : BaseCrudService<P
     }
 
     public async Task<BaseResponse<PersonDto>> GetDtoByIdAsync(Guid id)
+        => new GenericResponse<PersonDto>(await GetDtoByIdWithChecksAsync(id));
+
+    public async Task<BaseResponse<object>> DeleteWithCheckAsync(Guid id, UserDto user)
     {
-        var dto = await GetByIdAsync(id);
-        if(dto == null) NotificationsWrapper.AddNotification(NotificationMessages.NotFoundEntity("Person"));
-        if(NotificationsWrapper.HasNotification()) throw new NotificationException();
-        return new GenericResponse<PersonDto>(dto!);
+        var dto = await GetDtoByIdWithChecksAsync(id);
+        if (dto.Users.All(x => x.Id != user.Id)) AddNotification(NotificationMessages.UnauthorizedAction);
+        CheckNotification();
+        await DeleteAsync(id);
+        return new GenericResponse<object>();
     }
 
     #region Private Methods
 
     private async Task CheckDatabase(string email, string login)
     {
-        if ((await userRepository.GetAsync(x => x.Email == email)).Any())
-            NotificationsWrapper.AddNotification(NotificationMessages.AlreadyRegistered("Email"));
-        if ((await userRepository.GetAsync(x => x.Users.Any(x => x.Login == login))).Any())
-            NotificationsWrapper.AddNotification(NotificationMessages.AlreadyRegistered("Login"));
+        if ((await userRepository.GetAsync(person => person.Email == email)).Any())
+            AddNotification(NotificationMessages.AlreadyRegistered("Email"));
+        if ((await userRepository.GetAsync(person => person.Users.Any(user => user.Login == login))).Any())
+            AddNotification(NotificationMessages.AlreadyRegistered("Login"));
+        CheckNotification();
+    }
+
+    private async Task<PersonDto> GetDtoByIdWithChecksAsync(Guid id)
+    {
+        var dto = await GetByIdAsync(id);
+        if(dto == null) NotificationsWrapper.AddNotification(NotificationMessages.NotFoundEntity("Person"));
+        if(NotificationsWrapper.HasNotification()) throw new NotificationException();
+        return dto!;
     }
 
     #endregion

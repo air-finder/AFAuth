@@ -1,11 +1,17 @@
 ﻿using Domain;
 using Domain.Common;
+using Domain.Exceptions;
+using Domain.SeedWork.Notification;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application;
 
 public class BaseCrudService<T>(IBaseRepository<T> userRepository) : IBaseCrudService<T> where T : class
 {
+    protected void AddNotification(string message) => NotificationsWrapper.AddNotification(message);
+    protected void CheckNotification() {
+        if (NotificationsWrapper.HasNotification()) throw new NotificationException();
+    }
     public async Task<T?> GetByIdAsync(Guid id)
         => await userRepository.GetByIDAsync(id);
 

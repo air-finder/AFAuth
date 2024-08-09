@@ -22,10 +22,7 @@ builder.Services.AddSwaggerGen(c =>
             Title = "Auth API",
             Version = "0.0.1",
             Description = "API responsavel pela autenticação do dominio Air Finder",
-            Contact = new Microsoft.OpenApi.Models.OpenApiContact
-            {
-                Name = "Air Finder"
-            }
+            Contact = new Microsoft.OpenApi.Models.OpenApiContact { Name = "Air Finder" }
         });
 });
 

@@ -8,8 +8,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace API.Controllers;
 [Route("api/[controller]")]
-[Authorize]
-public class PeopleController(IPeopleService service): Controller
+public class PeopleController(IPeopleService service): BaseController
 {
     [HttpPost]
     [SwaggerOperation(Summary = "Creates a person with an user bound")]
@@ -17,9 +16,7 @@ public class PeopleController(IPeopleService service): Controller
     [ProducesResponseType(typeof(BaseResponse<object>), StatusCodes.Status400BadRequest)]
     [AllowAnonymous]
     public async Task<IActionResult> CreatePerson([FromBody] CreatePersonRequest request)
-    {
-        return Ok(await service.CreateAsync(request));
-    }
+        => Ok(await service.CreateAsync(request));
     
     [HttpGet("{id}")]
     [SwaggerOperation(Summary = "Returns a person by Id")]
@@ -34,4 +31,11 @@ public class PeopleController(IPeopleService service): Controller
     [ProducesResponseType(typeof(BaseResponse<object>), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetAsync([FromQuery] int pageIndex, int pageSize)
         => Ok(await service.GetDtoListAsync(pageIndex, pageSize));
+
+    [HttpDelete("{id}")]
+    [SwaggerOperation(Summary = "Deletes a user if authorized")]
+    [ProducesResponseType(typeof(BaseResponse<object>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(BaseResponse<object>), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
+        => Ok(await service.DeleteWithCheckAsync(id, user!));
 }

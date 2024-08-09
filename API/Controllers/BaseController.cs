@@ -1,31 +1,21 @@
-﻿using Application;
-using Domain.Common;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Text.Json;
+using Domain.Entities.Dtos;
+using Infra.Security.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace API.Controllers;
 [Route("api/[controller]")]
-public abstract class BaseController<T>(IBaseCrudService<T> baseService) : Controller where T : class
+[Authorize]
+public abstract class BaseController() : Controller
 {
-    [HttpGet("{id}")]
-    [SwaggerOperation(Summary = "Generic GET by Id")]
-    [ProducesResponseType(typeof(BaseResponse<object>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(BaseResponse<object>), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)
-        => Ok(await baseService.GetByIdAsync(id));
-
-    [HttpGet]
-    [SwaggerOperation(Summary = "Generic GET")]
-    [ProducesResponseType(typeof(BaseResponse<List<object>>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(BaseResponse<object>), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> GetAsync([FromQuery] int pageIndex, int pageSize)
-        => Ok(await baseService.GetListAsync(pageIndex, pageSize));
-    
-    // [HttpDelete("{id}")]
-    // [SwaggerOperation(Summary = "Generic DELETE")]
-    // [ProducesResponseType(typeof(BaseResponse<object>), StatusCodes.Status200OK)]
-    // [ProducesResponseType(typeof(BaseResponse<object>), StatusCodes.Status400BadRequest)]
-    // public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
-    //     => Ok(await baseService.DeleteAsync(id));
+    private string authToken => HttpContext.Request.Headers.Authorization.ToString().Replace("Bearer ", "");
+    private JwtSecurityToken token => new JwtSecurityTokenHandler().ReadJwtToken(authToken);
+    protected UserDto? user => GetType<UserDto>(JwtClaims.CAIM_USER_PROFILE);
+    protected IEnumerable<string>? scopes => GetType<IEnumerable<string>>(JwtClaims.CLAIM_SCOPES);
+    private static JsonSerializerOptions? serializeOptions 
+        => new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase, WriteIndented = true };
+    private T? GetType<T>(string type) 
+        => JsonSerializer.Deserialize<T>(token.Claims.FirstOrDefault(x => x.Type == type)!.Value, serializeOptions);
 }
