@@ -4,6 +4,7 @@ using Domain.Common.People;
 using Domain.Constants;
 using Domain.Entities;
 using Domain.Entities.Dtos;
+using Domain.Entities.Enums;
 using Domain.Exceptions;
 using Domain.Repositories;
 using Domain.SeedWork.Notification;
@@ -34,8 +35,7 @@ public class PeopleService(IPeopleRepository userRepository) : BaseCrudService<P
     public async Task<BaseResponse<object>> DeleteWithCheckAsync(Guid id, UserDto user)
     {
         var dto = await GetDtoByIdWithChecksAsync(id);
-        if (dto.Users.All(x => x.Id != user.Id)) AddNotification(NotificationMessages.UnauthorizedAction);
-        CheckNotification();
+        if (user.Role != UserRole.Admin && dto.Users.All(x => x.Id != user.Id)) throw new NotAllowedException();
         await DeleteAsync(id);
         return new GenericResponse<object>();
     }

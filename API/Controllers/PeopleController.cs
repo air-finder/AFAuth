@@ -8,7 +8,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace API.Controllers;
 [Route("api/[controller]")]
-public class PeopleController(IPeopleService service): BaseController
+public class PeopleController(IPeopleService service) : BaseController
 {
     [HttpPost]
     [SwaggerOperation(Summary = "Creates a person with an user bound")]
@@ -35,7 +35,7 @@ public class PeopleController(IPeopleService service): BaseController
     [HttpDelete("{id}")]
     [SwaggerOperation(Summary = "Deletes a user if authorized")]
     [ProducesResponseType(typeof(BaseResponse<object>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(BaseResponse<object>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(BaseResponse<object>), StatusCodes.Status405MethodNotAllowed)]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
         => Ok(await service.DeleteWithCheckAsync(id, user!));
 }
