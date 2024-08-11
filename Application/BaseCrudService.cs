@@ -1,37 +1,29 @@
 ﻿using Domain;
 using Domain.Common;
+using Domain.Exceptions;
+using Domain.SeedWork.Notification;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application;
 
-public class BaseCrudService<T>(IBaseRepository<T> baseRepository) : IBaseCrudService<T> where T : class
+public class BaseCrudService<T>(IBaseRepository<T> userRepository) : IBaseCrudService<T> where T : class
 {
-    public async Task<BaseResponse<T>> GetByIdAsync(Guid id)
-    {
-        var response = await baseRepository.GetByIDAsync(id);
-        return new GenericResponse<T>(response);
+    protected void AddNotification(string message) => NotificationsWrapper.AddNotification(message);
+    protected void CheckNotification() {
+        if (NotificationsWrapper.HasNotification()) throw new NotificationException();
     }
+    public async Task<T?> GetByIdAsync(Guid id)
+        => await userRepository.GetByIDAsync(id);
 
-    public async Task<BaseResponse<IEnumerable<T>>> GetListAsync(int pageIndex, int pageSize)
-    {
-        return new GenericResponse<IEnumerable<T>>(await baseRepository.GetAll().AsNoTracking().Skip(pageIndex * pageSize).Take(pageSize).ToListAsync());
-    }
+    public async Task<IEnumerable<T>> GetListAsync(int pageIndex, int pageSize)
+        => await userRepository.GetAll().AsNoTracking().Skip(pageIndex * pageSize).Take(pageSize).ToListAsync();
 
-    public async Task<BaseResponse<T>> CreateAsync(T entity)
-    {
-        await baseRepository.InsertWithSaveChangesAsync(entity);
-        return new GenericResponse<T>(entity);
-    }
+    public async Task CreateAsync(T entity)
+        => await userRepository.InsertWithSaveChangesAsync(entity);
 
-    public async Task<BaseResponse<T>> UpdateAsync(T entity)
-    {
-        await baseRepository.UpdateWithSaveChangesAsync(entity);
-        return new GenericResponse<T>(entity);
-    }
+    public async Task UpdateAsync(T entity) 
+        => await userRepository.UpdateWithSaveChangesAsync(entity);
 
-    public async Task<BaseResponse<object>> DeleteAsync(Guid id)
-    {
-        await baseRepository.DeleteAsync(id);
-        return new GenericResponse<object>(null);
-    }
+    public async Task DeleteAsync(Guid id)
+        => await userRepository.DeleteAsync(id);
 }
