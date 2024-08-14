@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API", "API\API.csproj", "{F9DCE0B0-C474-4362-B566-D35F60D6093A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "API\API.csproj", "{F9DCE0B0-C474-4362-B566-D35F60D6093A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. API Layer", "1. API Layer", "{0C66E8EE-B127-4569-8A15-E444C843E843}"
 EndProject
@@ -15,23 +15,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4. Infra Layer", "4. Infra 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5. Test Layer", "5. Test Layer", "{24370DB7-BA9F-4146-A03F-AA80A6E4A0C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{6343BB7C-F4DC-44A8-929F-CA3FCDCA88FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application.csproj", "{6343BB7C-F4DC-44A8-929F-CA3FCDCA88FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{DA2715A2-FD14-41BB-BB02-145A1482DA00}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{DA2715A2-FD14-41BB-BB02-145A1482DA00}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infra.Data", "Infra.Data\Infra.Data.csproj", "{84E91BB9-7FF4-4007-A8F0-1F7D07CE4DAA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infra.Data", "Infra.Data\Infra.Data.csproj", "{84E91BB9-7FF4-4007-A8F0-1F7D07CE4DAA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infra.Http", "Infra.Http\Infra.Http.csproj", "{281D2FC1-2170-4F5F-A386-FD9B76770EDE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infra.Http", "Infra.Http\Infra.Http.csproj", "{281D2FC1-2170-4F5F-A386-FD9B76770EDE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infra.IoC", "Infra.IoC\Infra.IoC.csproj", "{56F68792-5E36-4BC3-B44E-DAB8F153777A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infra.IoC", "Infra.IoC\Infra.IoC.csproj", "{56F68792-5E36-4BC3-B44E-DAB8F153777A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infra.Security", "Infra.Security\Infra.Security.csproj", "{4844873C-4F4C-493A-9622-5B2FFCFBC074}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infra.Security", "Infra.Security\Infra.Security.csproj", "{4844873C-4F4C-493A-9622-5B2FFCFBC074}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infra.Utils", "Infra.Utils\Infra.Utils.csproj", "{84AE6E83-7026-4BD3-82FA-0808D62D165A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infra.Utils", "Infra.Utils\Infra.Utils.csproj", "{84AE6E83-7026-4BD3-82FA-0808D62D165A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API.Tests", "API.Tests\API.Tests.csproj", "{A4115519-5F62-403A-A2E3-D1550F0CEA53}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API.Tests", "API.Tests\API.Tests.csproj", "{A4115519-5F62-403A-A2E3-D1550F0CEA53}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Tests", "Application.Tests\Application.Tests.csproj", "{FC39ED21-99A9-4445-91B7-E7EB26992F35}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Tests", "Application.Tests\Application.Tests.csproj", "{FC39ED21-99A9-4445-91B7-E7EB26992F35}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

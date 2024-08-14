@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using API.Extentions;
 using API.Middlewares;
 using Domain.SeedWork.Notification;
 using Infra.IoC;
@@ -73,11 +74,13 @@ app.MapControllers();
 app.UseRouting();
 app.UseCors("AllowAllOrigins");
 app.UseAuthorization();
-app.UseSwagger();
-app.UseSwaggerUI(c =>
+
+if (app.Environment.IsDevelopment())
 {
-    c.SwaggerEndpoint("/swagger/0.0.1/swagger.json", "Auth API");
-});
+    app.UseSwagger();
+    app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/0.0.1/swagger.json", "Auth API"); });
+    app.ApplyMigrations();
+}
 
 app.UseMiddleware<ControllerMiddleware>();
 
