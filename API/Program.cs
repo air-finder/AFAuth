@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers()
     .AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
-builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("App:Settings"));
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("Settings"));
 builder.Services.AddSwaggerGen(c =>
 {
     c.EnableAnnotations();
@@ -25,6 +25,8 @@ builder.Services.AddSwaggerGen(c =>
             Contact = new Microsoft.OpenApi.Models.OpenApiContact { Name = "Air Finder" }
         });
 });
+builder.Services.AddStackExchangeRedisCache(options =>
+    options.Configuration = builder.Configuration.GetConnectionString("Cache"));
 
 #region Local Injections
 builder.Services.AddLocalServices(builder.Configuration);
@@ -48,7 +50,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-var key = Convert.FromBase64String(builder.Configuration.GetSection("App:Settings:Jwt:Secret").Value!);
+var key = Convert.FromBase64String(builder.Configuration.GetSection("Settings:Jwt:Secret").Value!);
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

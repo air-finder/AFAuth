@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
+    <ProjectReference Include="..\Infra.Http\Infra.Http.csproj" />
     <ProjectReference Include="..\Infra.Security\Infra.Security.csproj" />
   </ItemGroup>
 

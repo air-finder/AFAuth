@@ -9,11 +9,11 @@ namespace Infra.Utils.Configuration
     {
         public static string BuildConnectionString(IConfiguration configuration)
         {
-            var sqlBuilder = new SqlConnectionStringBuilder(configuration["App:Settings:ConnectionString"])
+            var sqlBuilder = new SqlConnectionStringBuilder(configuration.GetConnectionString("Database"))
             {
                 PersistSecurityInfo = true,
                 MultipleActiveResultSets = true,
-                ConnectTimeout = 30
+                ConnectTimeout = 15
             };
             return sqlBuilder.ConnectionString;
         }

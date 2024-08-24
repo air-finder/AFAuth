@@ -38,4 +38,11 @@ public class PeopleController(IPeopleService service) : BaseController
     [ProducesResponseType(typeof(BaseResponse<object>), StatusCodes.Status405MethodNotAllowed)]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
         => Ok(await service.DeleteWithCheckAsync(id, user!));
+
+    [HttpPost("addUser")]
+    [SwaggerOperation(Summary = "Adds a user to a person")]
+    [ProducesResponseType(typeof(BaseResponse<PersonDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(BaseResponse<object>), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> AddUser([FromBody] AddUserRequest request)
+        => Ok(await service.AddUser(user!.PersonId, request));
 }
