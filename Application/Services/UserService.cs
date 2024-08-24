@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using System.Text;
+using Application.Interfaces;
 using Domain.Common;
 using Domain.Common.User;
 using Domain.Constants;
@@ -47,7 +48,7 @@ public class UserService(
         if (user == null) NotificationsWrapper.AddNotification(NotificationMessages.NotFoundEntity("user"));
         CheckNotification();
 
-        var token = "0929";
+        var token = GenerateRandomPin(6);
         await cache.SetStringAsync(
             $"reset-code-{user!.Id}",
             token,
@@ -87,4 +88,18 @@ public class UserService(
         await repository.SaveChangesAsync();
         return new GenericResponse<object>();
     }
+
+    #region Private Methods
+
+    private string GenerateRandomPin(int pinLength)
+    {
+        var random = new Random();
+        var builder = new StringBuilder();
+        for (var i = 0; i < pinLength; i++)
+        {
+            builder.Append(random.Next(0, 9));
+        }
+        return builder.ToString();
+    }
+    #endregion
 }
