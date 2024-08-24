@@ -132,6 +132,7 @@ namespace API.Middlewares
                     break;
                 case "POST":
                 case "PUT":
+                case "PATCH":
                     logger.LogError(
                         LogMessageBody,
                         context.Request.Method,
