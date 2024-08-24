@@ -1,14 +1,12 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Application;
-using Application.Helpers;
 using Application.Interfaces;
 using Application.Services;
-using Domain;
-using Domain.Entities;
 using Domain.Repositories;
 using Domain.SeedWork.Notification;
 using Infra.Data;
 using Infra.Data.Repository;
+using Infra.Http.AFMail;
 using Infra.Security;
 using Infra.Utils.Configuration;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +18,15 @@ namespace Infra.IoC
     [ExcludeFromCodeCoverage]
     public static class NativeInjector
     {
-        public static void AddLocalHttpClients(this IServiceCollection services, IConfiguration configuration) {}
+        public static void AddLocalHttpClients(this IServiceCollection services, IConfiguration configuration)
+        {
+            var urlMail = configuration["Settings:AFMailUrl"];
+
+            services.AddHttpClient<IMailService, MailService>(client => {
+                client.BaseAddress = new Uri(urlMail!);
+                client.Timeout = TimeSpan.FromSeconds(10);
+            });
+        }
 
         public static void AddLocalServices(this IServiceCollection services, IConfiguration configuration)
         {

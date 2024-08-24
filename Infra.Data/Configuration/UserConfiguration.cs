@@ -11,12 +11,12 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.ToTable("Users", "AF");
 
         builder.HasKey(e => e.Id);
-        builder.Property(e => e.Id).HasColumnName("Id").HasColumnType("uniqueidentifier").HasDefaultValueSql("newid()").IsRequired();
+        builder.Property(e => e.Id).HasColumnName("Id").HasColumnType("uniqueidentifier").ValueGeneratedNever().IsRequired();
         builder.Property(e => e.Login).HasColumnName("Login").HasColumnType("varchar").HasMaxLength(20).IsRequired();
         builder.Property(e => e.Hash).HasColumnName("Hash").HasColumnType("varchar").HasMaxLength(100).IsRequired();
         builder.Property(e => e.Salt).HasColumnName("Salt").HasColumnType("varchar").HasMaxLength(100).IsRequired();
         builder.Property(e => e.PersonId).HasColumnName("IdPerson").HasColumnType("uniqueidentifier").IsRequired();
-        builder.Property(e => e.Role).HasColumnName("Role").HasColumnType("int").IsRequired();
+        builder.Property(e => e.Role).HasColumnName("Role").IsRequired().HasConversion<string>().HasMaxLength(15);
 
         builder.HasOne(e => e.Person).WithMany(x => x.Users).HasForeignKey(e => e.PersonId);
     }
