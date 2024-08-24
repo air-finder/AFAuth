@@ -18,7 +18,7 @@ jobs:
           ConnectionStrings.Database: ${{ secrets.CONNECTION_STRING }}
           ConnectionStrings.Cache: ${{ secrets.REDIS_CONNECTION_STRING }}
           Settings.Jwt.Secret: ${{ secrets.JWT_SECRET }}
-          Settings.AFMailUrl: ${{ $AFMAIL_URL }}
+          Settings.AFMailUrl: ${{ vars.AFMAIL_URL }}
           Serilog.WriteTo: ${{ secrets.SEQ_WRITE }}
 
       - name: build
