@@ -40,7 +40,7 @@ public class UserService(
         return new GenericResponse<object>();
     }
 
-    public async Task<BaseResponse<object>> ForgetPassword(string authToken, ForgetPasswordRequest request)
+    public async Task<BaseResponse<object>> ForgetPassword(ForgetPasswordRequest request)
     {
         request.Check();
         var user = await repository.Get(x => x.Login == request.User).FirstOrDefaultAsync();
@@ -53,8 +53,8 @@ public class UserService(
             token,
             new DistributedCacheEntryOptions { AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5) }
         );
-        var mailRequest = new MailRequest(new List<string> { user!.Person!.Email }, "seu token", token);
-        await mailService.SendMail(authToken, mailRequest);
+        var mailRequest = new MailRequest(new List<string> { user.Person!.Email }, "seu token", token);
+        await mailService.SendMail(jwtService.CreateToken(user), mailRequest);
         return new GenericResponse<object>();
     }
 

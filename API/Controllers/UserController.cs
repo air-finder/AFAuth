@@ -7,7 +7,6 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace API.Controllers;
 [Route("api/[controller]")]
-[Authorize]
 public class UserController(IUserService service) : BaseController
 {
     [HttpPost]
@@ -29,13 +28,15 @@ public class UserController(IUserService service) : BaseController
     [SwaggerOperation(Summary = "Sends an email to update password if user exists")]
     [ProducesResponseType(typeof(BaseResponse<object>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(BaseResponse<object>), StatusCodes.Status400BadRequest)]
+    [AllowAnonymous]
     public async Task<IActionResult> ForgetPassword([FromBody] ForgetPasswordRequest request)
-        => Ok(await service.ForgetPassword(authToken, request));
+        => Ok(await service.ForgetPassword(request));
 
     [HttpPatch("password/token")]
     [SwaggerOperation(Summary = "Checks if code is the same as the sent")]
     [ProducesResponseType(typeof(BaseResponse<object>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(BaseResponse<object>), StatusCodes.Status400BadRequest)]
+    [AllowAnonymous]
     public async Task<IActionResult> ForgetPasswordCheck([FromBody] ForgetPasswordRequest request)
         => Ok(await service.ForgetPasswordCheck(request));
 
@@ -43,6 +44,7 @@ public class UserController(IUserService service) : BaseController
     [SwaggerOperation(Summary = "Update password for checked email")]
     [ProducesResponseType(typeof(BaseResponse<object>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(BaseResponse<object>), StatusCodes.Status400BadRequest)]
+    [AllowAnonymous]
     public async Task<IActionResult> ForgetPasswordUpdate([FromBody] ForgetPasswordRequest request)
         => Ok(await service.ForgetPasswordUpdate(request));
 }
