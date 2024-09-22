@@ -7,7 +7,7 @@ namespace Domain.Entities;
 
 public class Person : BaseEntity
 {
-    public Person() {}
+    protected Person() {}
     public Person(string name, string email, DateTime? birthday, string? personalCode, Gender gender, string? phone)
     {
         if (string.IsNullOrWhiteSpace(name)) NotificationsWrapper.AddNotification(NotificationMessages.NotEmptyEntity(nameof(Name)));

@@ -9,7 +9,7 @@ namespace Domain.Entities;
 
 public class User : BaseEntity
 {
-    public User() { }
+    protected User() { }
     public User(string login, string password)
     {
         if (string.IsNullOrWhiteSpace(login)) NotificationsWrapper.AddNotification(NotificationMessages.NotEmptyEntity(nameof(Login)));
