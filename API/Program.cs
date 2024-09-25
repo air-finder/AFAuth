@@ -2,9 +2,11 @@ using System.Text.Json.Serialization;
 using API.Extentions;
 using API.Middlewares;
 using Domain.SeedWork.Notification;
+using HealthChecks.UI.Client;
 using Infra.IoC;
 using Infra.Utils.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 
@@ -32,6 +34,7 @@ builder.Services.AddStackExchangeRedisCache(options =>
 builder.Services.AddLocalServices(builder.Configuration);
 builder.Services.AddLocalHttpClients(builder.Configuration);
 builder.Services.AddLocalUnitOfWork(builder.Configuration);
+builder.Services.AddLocalHealthChecks(builder.Configuration);
 #endregion
 
 builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
@@ -50,7 +53,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-var key = Convert.FromBase64String(builder.Configuration.GetSection("Settings:Jwt:Secret").Value!);
+var key = Convert.FromBase64String(builder.Configuration.GetSection("App:Settings:Jwt:Secret").Value!);
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -72,6 +75,7 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 ServiceLocator.Initialize(app.Services.GetRequiredService<IContainer>());
+app.MapHealthChecks("health", new HealthCheckOptions { ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse });
 app.MapControllers();
 app.UseRouting();
 app.UseCors("AllowAllOrigins");
@@ -88,7 +92,7 @@ app.UseMiddleware<ControllerMiddleware>();
 
 try
 {
-    Log.Information("Starting the application...");
+    Log.Information("[AFAuth] Starting the application...");
     app.Run();
 }
 catch (Exception ex)

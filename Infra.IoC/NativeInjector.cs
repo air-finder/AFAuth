@@ -50,5 +50,15 @@ namespace Infra.IoC
             services.AddDbContext<Context>(options => options.UseLazyLoadingProxies().UseSqlServer(connString));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
+
+        public static void AddLocalHealthChecks(this IServiceCollection services, IConfiguration configuration)
+        {
+            var connString = Builders.BuildConnectionString(configuration);
+            var cacheConnString = configuration["App:Settings:Cache"]!;
+            services.AddHealthChecks()
+                //.AddSeqPublisher()
+                .AddSqlServer(connString)
+                .AddRedis(cacheConnString);
+        }
     }
 }

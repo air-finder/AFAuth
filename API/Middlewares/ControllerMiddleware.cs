@@ -98,6 +98,7 @@ namespace API.Middlewares
                     break;
                 case "POST":
                 case "PUT":
+                case "PATCH":
                     logger.LogInformation(
                         LogMessageBody,
                         context.Request.Method,

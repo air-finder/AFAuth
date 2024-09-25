@@ -9,7 +9,7 @@ namespace Infra.Utils.Configuration
     {
         public static string BuildConnectionString(IConfiguration configuration)
         {
-            var sqlBuilder = new SqlConnectionStringBuilder(configuration.GetConnectionString("Database"))
+            var sqlBuilder = new SqlConnectionStringBuilder(configuration["App:Settings:ConnectionString"])
             {
                 PersistSecurityInfo = true,
                 MultipleActiveResultSets = true,
