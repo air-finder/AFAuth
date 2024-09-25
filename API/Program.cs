@@ -97,7 +97,7 @@ try
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, "Application failed to start");
+    Log.Fatal(ex, "[AFAuth] Application failed to start");
 }
 finally
 {
