@@ -14,7 +14,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers()
     .AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
-builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("Settings"));
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+builder.Services.Configure<CrossCuttingMapper>(builder.Configuration.GetSection("CrossCuttingMapper"));
 builder.Services.AddSwaggerGen(c =>
 {
     c.EnableAnnotations();
@@ -53,7 +54,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-var key = Convert.FromBase64String(builder.Configuration.GetSection("App:Settings:Jwt:Secret").Value!);
+var key = Convert.FromBase64String(builder.Configuration.GetSection("AppSettings:Jwt:Secret").Value!);
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

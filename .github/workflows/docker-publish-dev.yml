@@ -15,10 +15,10 @@ jobs:
         with:
           files: '${{ github.workspace }}/API/appsettings.json'
         env:
-          App.Settings.ConnectionString: ${{ secrets.CONNECTION_STRING }}
-          App.Settings.Cache: ${{ secrets.REDIS_CONNECTION_STRING }}
-          App.Settings.Jwt.Secret: ${{ secrets.JWT_SECRET }}
-          App.Settings.AFMailUrl: ${{ vars.AFMAIL_URL }}
+          ConnectionStrings.SqlServer: ${{ secrets.CONNECTION_STRING }}
+          ConnectionStrings.Redis: ${{ secrets.REDIS_CONNECTION_STRING }}
+          AppSettings.Jwt.Secret: ${{ secrets.JWT_SECRET }}
+          CrossCuttingMapper.MailUrl: ${{ vars.AFMAIL_URL }}
           Serilog.WriteTo: ${{ secrets.SEQ_WRITE }}
 
       - name: build

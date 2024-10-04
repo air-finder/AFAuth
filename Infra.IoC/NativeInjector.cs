@@ -12,6 +12,7 @@ using Infra.Utils.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace Infra.IoC
 {
@@ -20,7 +21,7 @@ namespace Infra.IoC
     {
         public static void AddLocalHttpClients(this IServiceCollection services, IConfiguration configuration)
         {
-            var urlMail = configuration["Settings:AFMailUrl"];
+            var urlMail = configuration["CrossCuttingMapper:MailUrl"];
 
             services.AddHttpClient<IMailService, MailService>(client => {
                 client.BaseAddress = new Uri(urlMail!);
@@ -54,11 +55,11 @@ namespace Infra.IoC
         public static void AddLocalHealthChecks(this IServiceCollection services, IConfiguration configuration)
         {
             var connString = Builders.BuildConnectionString(configuration);
-            var cacheConnString = configuration["App:Settings:Cache"]!;
+            var redisConnString = configuration["ConnectionStrings:Redis"]!;
             services.AddHealthChecks()
                 //.AddSeqPublisher()
                 .AddSqlServer(connString)
-                .AddRedis(cacheConnString);
+                .AddRedis(redisConnString);
         }
     }
 }
