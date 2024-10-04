@@ -5,12 +5,12 @@ using Newtonsoft.Json;
 
 namespace Infra.Http.AFMail;
 
-public class MailService(HttpClient _http) : IMailService
+public class MailService(HttpClient http) : IMailService
 {
     public async Task SendMail(string authToken, MailRequest request)
     {
-        _http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
+        http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
         var content = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
-        await _http.PostAsync("api/mail", content);
+        await http.PostAsync("api/mail", content);
     }
 }

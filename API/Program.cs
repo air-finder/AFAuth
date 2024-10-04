@@ -29,7 +29,7 @@ builder.Services.AddSwaggerGen(c =>
         });
 });
 builder.Services.AddStackExchangeRedisCache(options =>
-    options.Configuration = builder.Configuration.GetConnectionString("Cache"));
+    options.Configuration = builder.Configuration.GetConnectionString("Redis"));
 
 #region Local Injections
 builder.Services.AddLocalServices(builder.Configuration);
