@@ -5,9 +5,7 @@ using Domain.SeedWork.Notification;
 using HealthChecks.UI.Client;
 using Infra.IoC;
 using Infra.Utils.Configuration;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.IdentityModel.Tokens;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,15 +26,18 @@ builder.Services.AddSwaggerGen(c =>
             Contact = new Microsoft.OpenApi.Models.OpenApiContact { Name = "Air Finder" }
         });
 });
-builder.Services.AddStackExchangeRedisCache(options =>
-    options.Configuration = builder.Configuration.GetConnectionString("Redis"));
+
 
 #region Local Injections
 builder.Services.AddLocalServices(builder.Configuration);
 builder.Services.AddLocalHttpClients(builder.Configuration);
 builder.Services.AddLocalUnitOfWork(builder.Configuration);
 builder.Services.AddLocalHealthChecks(builder.Configuration);
+builder.Services.AddLocalSecurity(builder.Configuration);
 #endregion
+
+builder.Services.AddStackExchangeRedisCache(options =>
+    options.Configuration = builder.Configuration.GetConnectionString("Redis"));
 
 builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
     loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration)
@@ -52,24 +53,6 @@ builder.Services.AddCors(options =>
         builder.AllowAnyHeader();
         builder.AllowAnyMethod();
     });
-});
-
-var key = Convert.FromBase64String(builder.Configuration.GetSection("AppSettings:Jwt:Secret").Value!);
-builder.Services.AddAuthentication(x =>
-{
-    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(x =>
-{
-    x.RequireHttpsMetadata = false;
-    x.SaveToken = true;
-    x.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(key),
-        ValidateIssuer = false,
-        ValidateAudience = false
-    };
 });
 
 var app = builder.Build();
@@ -89,6 +72,7 @@ if (app.Environment.IsDevelopment())
     app.ApplyMigrations();
 }
 
+app.UseMiddleware<RedisCacheMiddleware>();
 app.UseMiddleware<ControllerMiddleware>();
 
 try
