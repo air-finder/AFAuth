@@ -47,11 +47,12 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddOptions();
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAllOrigins", builder =>
+    options.AddPolicy("AllowSpecificOrigin", builder =>
     {
-        builder.AllowAnyOrigin();
-        builder.AllowAnyHeader();
-        builder.AllowAnyMethod();
+        builder.WithOrigins("https://bvsilva.com", "https://*.bvsilva.com")
+            .SetIsOriginAllowedToAllowWildcardSubdomains()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
     });
 });
 
@@ -62,7 +63,7 @@ ServiceLocator.Initialize(app.Services.GetRequiredService<IContainer>());
 app.MapHealthChecks("health", new HealthCheckOptions { ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse });
 app.MapControllers();
 app.UseRouting();
-app.UseCors("AllowAllOrigins");
+app.UseCors("AllowSpecificOrigin");
 app.UseAuthorization();
 
 if (app.Environment.IsDevelopment())
